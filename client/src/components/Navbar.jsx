@@ -57,7 +57,7 @@ export default function Navbar() {
           {/* CTA */}
           <div className="hidden md:block">
             <button className="group flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm rounded-xl font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all">
-              Login
+               <Link to="/dashboard"> Login </Link>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>

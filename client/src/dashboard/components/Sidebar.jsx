@@ -12,8 +12,8 @@ import {
 
 const menuItems = [
   { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { name: "Employees", icon: Users, path: "/dashboard/employees" },
-  { name: "Add Employee", icon: UserPlus, path: "/dashboard/add-employee" },
+  { name: "Employees", icon: Users, path: "employees" },
+  { name: "Add Employee", icon: UserPlus, path: "addemployee" },
   { name: "Attendance", icon: CalendarDays, path: "/dashboard/attendance" },
   { name: "Payroll", icon: Wallet, path: "/dashboard/payroll" },
   { name: "Settings", icon: Settings, path: "/dashboard/settings" },
@@ -21,7 +21,7 @@ const menuItems = [
 
 export default function Sidebar({ className = "hidden md:flex" }) {
   return (
-    <aside className={`${className} flex-col w-64 h-screen sticky top-0 bg-white/50 backdrop-blur-2xl border-r border-white/70 shadow-[0_0_40px_rgba(37,99,235,0.06)]`}>
+    <aside className={`${className} flex-col w-64 shrink-0 h-screen fixed top-0 left-0 bg-white/50 backdrop-blur-2xl border-r border-white/70 shadow-[0_0_40px_rgba(37,99,235,0.06)]`}>
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-6 h-16 border-b border-white/60">
         <div className="p-2.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg shadow-blue-500/30">

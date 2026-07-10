@@ -6,9 +6,9 @@ import { Outlet } from 'react-router-dom'
 const AppLayout = () => {
     return (
         <>
-            <Navbar/>
-                    <Outlet/>
-            <Footer/>
+            <Navbar />
+            <Outlet />
+            <Footer />
         </>
     )
 }

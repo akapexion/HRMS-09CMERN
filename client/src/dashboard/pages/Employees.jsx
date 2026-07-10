@@ -35,9 +35,9 @@ export default function Employees() {
   );
 
   return (
-    <div>
+    <div className="min-w-0 w-full">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col  sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="p-3 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg shadow-blue-500/30">
             <Users className="w-5 h-5 text-white" />

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { X } from "lucide-react";
-import Sidebar from "./Sidebar";
-import TopNavbar from "./TopNavbar";
-import Footer from "./Footer";
+import Sidebar from "./components/Sidebar";
+import TopNavbar from "./components/TopNavbar";
+import Footer from "./components/Footer";
 
 export default function DashboardLayout() {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -37,7 +37,7 @@ export default function DashboardLayout() {
             )}
 
             {/* Main Content */}
-            <div className="relative flex-1 flex flex-col min-h-screen">
+            <div className="relative flex-1 flex flex-col min-h-screen min-w-0 md:ml-64">
                 <TopNavbar onMenuClick={() => setMobileOpen(true)} />
 
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
