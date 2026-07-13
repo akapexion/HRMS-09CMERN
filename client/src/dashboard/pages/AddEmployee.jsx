@@ -12,17 +12,40 @@ import {
   UserPlus,
   Camera,
 } from "lucide-react";
+import axios from 'axios'
 
 const inputClass =
   "w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-white/70 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 text-sm transition-shadow";
 
 export default function AddEmployee() {
+
+  const [empFullName, setEmpFullName] = useState("");
+  const [empEmail, setEmpEmail] = useState("");
+  const [empPhoneNumber, setEmpPhoneNumber] = useState("");
+  const [empAddress, setEmpAddress] = useState("");
+
+  const [empDepartment, setEmpDepartment] = useState("");
+  const [empPosition, setEmpPosition] = useState("");
+  const [empJoiningDate, setEmpJoiningDate] = useState("");
+  const [empSalary, setEmpSalary] = useState("");
+
   const [gender, setGender] = useState("male");
 
-  const handleSubmit = (e) => {
+  const handleSubmission = async(e) => {
     e.preventDefault();
-    // TODO: connect to backend API
-  };
+    try{
+      const response = await axios.post("http://localhost:3000/addemployee", {
+        empFullName, empEmail, empPhoneNumber, empAddress, empDepartment, empPosition, empJoiningDate, empSalary, gender
+      });
+
+      console.log(response);
+    }
+    catch(err){
+      console.log(err);
+    }
+
+    
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -38,7 +61,7 @@ export default function AddEmployee() {
       </div>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmission}
         className="bg-white/50 backdrop-blur-2xl border border-white/70 rounded-3xl shadow-xl shadow-blue-500/5 p-6 sm:p-9 space-y-8"
       >
         {/* Avatar upload */}
@@ -65,16 +88,16 @@ export default function AddEmployee() {
           <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-4">Personal Information</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <Field label="Full Name" icon={User}>
-              <input type="text" placeholder="e.g. Sarah Khan" className={inputClass} />
+              <input type="text" placeholder="e.g. Sarah Khan" className={inputClass} value={empFullName} onChange={(e) => setEmpFullName(e.target.value)} />
             </Field>
             <Field label="Email Address" icon={Mail}>
-              <input type="email" placeholder="e.g. sarah@company.com" className={inputClass} />
+              <input type="email" placeholder="e.g. sarah@company.com" className={inputClass} value={empEmail} onChange={(e) => setEmpEmail(e.target.value)} />
             </Field>
             <Field label="Phone Number" icon={Phone}>
-              <input type="tel" placeholder="e.g. +1 555 123 4567" className={inputClass} />
+              <input type="tel" placeholder="e.g. +1 555 123 4567" className={inputClass} value={empPhoneNumber} onChange={(e) => setEmpPhoneNumber(e.target.value)} />
             </Field>
             <Field label="Address" icon={MapPin}>
-              <input type="text" placeholder="e.g. New York, USA" className={inputClass} />
+              <input type="text" placeholder="e.g. New York, USA" className={inputClass} value={empAddress} onChange={(e) => setEmpAddress(e.target.value)} />
             </Field>
           </div>
         </div>
@@ -86,22 +109,22 @@ export default function AddEmployee() {
           <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-4">Job Details</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <Field label="Department" icon={Building2}>
-              <select className={inputClass}>
-                <option>Human Resources</option>
-                <option>Engineering</option>
-                <option>Marketing</option>
-                <option>Sales</option>
-                <option>Finance</option>
+              <select className={inputClass} onChange={(e) => setEmpDepartment(e.target.value)}>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="Finance">Finance</option>
               </select>
             </Field>
             <Field label="Position" icon={Briefcase}>
-              <input type="text" placeholder="e.g. HR Manager" className={inputClass} />
+              <input type="text" placeholder="e.g. HR Manager" className={inputClass} value={empPosition} onChange={(e) => setEmpPosition(e.target.value)} />
             </Field>
             <Field label="Joining Date" icon={CalendarDays}>
-              <input type="date" className={inputClass} />
+              <input type="date" className={inputClass} value={empJoiningDate} onChange={(e) => setEmpJoiningDate(e.target.value)} />
             </Field>
             <Field label="Salary" icon={Wallet}>
-              <input type="number" placeholder="e.g. 60000" className={inputClass} />
+              <input type="number" placeholder="e.g. 60000" className={inputClass} value={empSalary} onChange={(e) => setEmpSalary(e.target.value)} />
             </Field>
           </div>
         </div>
@@ -115,11 +138,10 @@ export default function AddEmployee() {
             {["male", "female", "other"].map((g) => (
               <label
                 key={g}
-                className={`px-5 py-2 rounded-xl border cursor-pointer capitalize text-sm font-medium transition-all ${
-                  gender === g
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md shadow-blue-500/30"
-                    : "bg-white/70 border-white/70 text-slate-600 hover:bg-white"
-                }`}
+                className={`px-5 py-2 rounded-xl border cursor-pointer capitalize text-sm font-medium transition-all ${gender === g
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md shadow-blue-500/30"
+                  : "bg-white/70 border-white/70 text-slate-600 hover:bg-white"
+                  }`}
               >
                 <input
                   type="radio"
