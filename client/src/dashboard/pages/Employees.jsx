@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, Eye, Pencil, Trash2, Users, UserCheck, UserMinus, ChevronLeft, ChevronRight } from "lucide-react";
+import axios from 'axios'
 
 const employees = [
   { id: 1, name: "Sarah Khan", email: "sarah@company.com", department: "Human Resources", position: "HR Manager", status: "Active" },
@@ -30,9 +31,28 @@ const summary = [
 export default function Employees() {
   const [query, setQuery] = useState("");
 
+  const [empData, setEmpData] = useState([]);
+
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/employees");
+
+      console.log(response.data.employeesList);
+      setEmpData(response.data.employeesList);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+
   const filtered = employees.filter((emp) =>
     emp.name.toLowerCase().includes(query.toLowerCase())
   );
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
   return (
     <div className="min-w-0 w-full">
@@ -93,40 +113,42 @@ export default function Employees() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((emp) => (
-                <tr key={emp.id} className="border-b border-white/50 last:border-0 hover:bg-white/60 transition-colors">
-                  <td className="px-6 py-4 flex items-center gap-3">
-                    <img
-                      src={`https://i.pravatar.cc/40?u=${emp.id}`}
-                      alt={emp.name}
-                      className="w-9 h-9 rounded-full ring-2 ring-blue-100"
-                    />
-                    <span className="font-medium text-slate-800">{emp.name}</span>
-                  </td>
-                  <td className="px-6 py-4 text-slate-600">{emp.email}</td>
-                  <td className="px-6 py-4 text-slate-600">{emp.department}</td>
-                  <td className="px-6 py-4 text-slate-600">{emp.position}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${statusStyles[emp.status]}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${statusDot[emp.status]}`} />
-                      {emp.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-slate-600 hover:bg-slate-700 hover:text-white transition-colors">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                {
+                  empData.map((e) => (
+                    <tr key={e._id} className="border-b border-white/50 last:border-0 hover:bg-white/60 transition-colors">
+                      <td className="px-6 py-4 flex items-center gap-3">
+                        <img
+                          src={`https://i.pravatar.cc/40?u=${e._id}`}
+                          alt={e.employee_name}
+                          className="w-9 h-9 rounded-full ring-2 ring-blue-100"
+                        />
+                        <span className="font-medium text-slate-800">{e.employee_name}</span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-600">{e.employee_email}</td>
+                      <td className="px-6 py-4 text-slate-600">{e.employee_dept}</td>
+                      <td className="px-6 py-4 text-slate-600">{e.employee_position}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium active`}>
+                          <span className={`w-1.5 h-1.5 rounded-full active`} />
+                          Active
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-slate-600 hover:bg-slate-700 hover:text-white transition-colors">
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
 
               {filtered.length === 0 && (
                 <tr>

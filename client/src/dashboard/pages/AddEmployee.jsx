@@ -31,20 +31,32 @@ export default function AddEmployee() {
 
   const [gender, setGender] = useState("male");
 
-  const handleSubmission = async(e) => {
+  const handleSubmission = async (e) => {
     e.preventDefault();
-    try{
+    try {
       const response = await axios.post("http://localhost:3000/addemployee", {
         empFullName, empEmail, empPhoneNumber, empAddress, empDepartment, empPosition, empJoiningDate, empSalary, gender
       });
 
       console.log(response);
+
+      setEmpFullName("");
+      setEmpEmail("");
+      setEmpPhoneNumber("");
+      setEmpAddress("");
+
+      setEmpDepartment("");
+      setEmpPosition("");
+      setEmpJoiningDate("");
+      setEmpSalary("");
+
+      setGender("");
     }
-    catch(err){
+    catch (err) {
       console.log(err);
     }
 
-    
+
   }
 
   return (
