@@ -31,6 +31,12 @@ const summary = [
 export default function Employees() {
   const [query, setQuery] = useState("");
 
+  const [editingID, setEditingID] = useState(null);
+  const [editEmpName, setEditEmpName] = useState("");
+  const [editEmpEmail, setEditEmpEmail] = useState("");
+  const [editEmpDept, setEditEmpDept] = useState("Engineering");
+  const [editEmpPosition, setEditEmpPosition] = useState("");
+
   const [empData, setEmpData] = useState([]);
 
   const fetchEmployees = async () => {
@@ -53,6 +59,15 @@ export default function Employees() {
   useEffect(() => {
     fetchEmployees();
   }, []);
+
+  const handleEdit = (emp) => {
+    console.log("Edit Button Clicked...." + emp._id + emp.employee_name);
+    setEditingID(emp._id);
+    setEditEmpName(emp.employee_name);
+    setEditEmpEmail(emp.employee_email);
+    setEditEmpDept(emp.employee_dept);
+    setEditEmpPosition(emp.employee_position);
+  }
 
   return (
     <div className="min-w-0 w-full">
@@ -113,42 +128,76 @@ export default function Employees() {
               </tr>
             </thead>
             <tbody>
-                {
-                  empData.map((e) => (
-                    <tr key={e._id} className="border-b border-white/50 last:border-0 hover:bg-white/60 transition-colors">
-                      <td className="px-6 py-4 flex items-center gap-3">
-                        <img
-                          src={`https://i.pravatar.cc/40?u=${e._id}`}
-                          alt={e.employee_name}
-                          className="w-9 h-9 rounded-full ring-2 ring-blue-100"
-                        />
-                        <span className="font-medium text-slate-800">{e.employee_name}</span>
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">{e.employee_email}</td>
-                      <td className="px-6 py-4 text-slate-600">{e.employee_dept}</td>
-                      <td className="px-6 py-4 text-slate-600">{e.employee_position}</td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium active`}>
-                          <span className={`w-1.5 h-1.5 rounded-full active`} />
-                          Active
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-slate-600 hover:bg-slate-700 hover:text-white transition-colors">
-                            <Pencil className="w-4 h-4" />
-                          </button>
-                          <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                }
+              {
+                empData.map((e) => (
+                  <tr key={e._id} className="border-b border-white/50 last:border-0 hover:bg-white/60 transition-colors">
+                    <td className="px-6 py-4 flex items-center gap-3">
+                      <img
+                        src={`https://i.pravatar.cc/40?u=${e._id}`}
+                        alt={e.employee_name}
+                        className="w-9 h-9 rounded-full ring-2 ring-blue-100"
+                      />
+                      <span className="font-medium text-slate-800">
+                        {
+                          editingID == e._id ?
+                            <input type="text" className="border border-gray-300 p-2" value={editEmpName} onChange={(e) => setEditEmpName(e.target.value)} />
+                            :
+                            e.employee_name
+
+                        }</span>
+                    </td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {
+                        editingID == e._id ?
+                          <input type="text" className="border border-gray-300 p-2" value={editEmpEmail} onChange={(e) => setEditEmpEmail(e.target.value)} />
+                          :
+                          e.employee_email
+                      }</td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {
+                        editingID == e._id ?
+                          <select className="border border-gray-300 p-2" onChange={(e) => setEditEmpDept(e.target.value)}>
+                            <option value="Human Resources">Human Resources</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Finance">Finance</option>
+                          </select>
+                          :
+                          e.employee_dept
+                      }</td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {
+                        editingID == e._id ?
+                          <input type="text" className="border border-gray-300 p-2" value={editEmpPosition} onChange={(e) => setEditEmpPosition(e.target.value)} />
+                          :
+                          e.employee_position
+
+                      }</td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium active`}>
+                        <span className={`w-1.5 h-1.5 rounded-full active`} />
+                        Active
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-2">
+                        <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
+                          <Eye className="w-4 h-4" />
+                        </button>
+
+                        <button onClick={() => handleEdit(e)} className="p-2 rounded-lg bg-white/70 border border-white/70 text-slate-600 hover:bg-slate-700 hover:text-white transition-colors">
+                          <Pencil className="w-4 h-4" />
+                        </button>
+
+                        <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
 
               {filtered.length === 0 && (
                 <tr>
