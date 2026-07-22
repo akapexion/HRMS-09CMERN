@@ -19,23 +19,41 @@ app.post("/addemployee", async (req, res) => {
         const { empFullName, empEmail, empPhoneNumber, empAddress, empDepartment, empPosition, empJoiningDate, empSalary, gender } = req.body;
 
         await Employee.insertOne({ employee_name: empFullName, employee_address: empAddress, employee_number: empPhoneNumber, employee_dept: empDepartment, employee_position: empPosition, employee_joiningdate: empJoiningDate, employee_salary: empSalary, employee_gender: gender, employee_email: empEmail });
-        res.send({message : "Employee Inserted Successfully"});
+        res.send({ message: "Employee Inserted Successfully" });
     }
     catch (err) {
         console.log(err);
     }
 })
 
-app.get("/employees", async(req, res) => {
-    try{
+app.get("/employees", async (req, res) => {
+    try {
         const employeesList = await Employee.find();
-        res.send({employeesList});
+        res.send({ employeesList });
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
 })
 
+
+app.put("/updateemployee/:id", async (req, res) => {
+    const { editEmpName, editEmpEmail, editEmpDept, editEmpPosition } = req.body;
+    try {
+        await Employee.updateOne({ _id: req.params.id }, {
+            $set: {
+                employee_name: editEmpName,
+                employee_email: editEmpEmail,
+                employee_dept: editEmpDept,
+                employee_position: editEmpPosition
+            }
+        });
+        res.send({ message: "Employee Modified Successfully" });
+    }
+    catch (err) {
+
+    }
+})
 
 
 

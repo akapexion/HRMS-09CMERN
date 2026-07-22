@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Eye, Pencil, Trash2, Users, UserCheck, UserMinus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Eye, Pencil, Trash2, Users, UserCheck, UserMinus, ChevronLeft, ChevronRight, Check, X } from "lucide-react";
 import axios from 'axios'
 
 const employees = [
@@ -67,6 +67,21 @@ export default function Employees() {
     setEditEmpEmail(emp.employee_email);
     setEditEmpDept(emp.employee_dept);
     setEditEmpPosition(emp.employee_position);
+  }
+
+  const handleSave = async (id) => {
+    try {
+      const response = await axios.put(`http://localhost:3000/updateemployee/${id}`, {
+        editEmpName, editEmpEmail, editEmpDept, editEmpPosition
+      });
+
+      console.log(response);
+
+      setEditingID(null);
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -182,17 +197,31 @@ export default function Employees() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
-                          <Eye className="w-4 h-4" />
-                        </button>
 
-                        <button onClick={() => handleEdit(e)} className="p-2 rounded-lg bg-white/70 border border-white/70 text-slate-600 hover:bg-slate-700 hover:text-white transition-colors">
-                          <Pencil className="w-4 h-4" />
-                        </button>
+                        {editingID == e._id ?
+                          <>
+                            <button onClick={() => handleSave(e._id)} className="p-2 rounded-lg bg-green-600 border border-white/70 text-white">
+                              <Check className="w-4 h-4" />
+                            </button>
 
-                        <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                            <button onClick={() => setEditingID(null)} className="p-2 rounded-lg bg-yellow-600 border border-white/70 text-white">
+                              <X className="w-4 h-4" />
+                            </button>
+                          </>
+                          :
+                          <>
+                            <button onClick={() => handleEdit(e)} className="p-2 rounded-lg bg-white/70 border border-white/70 text-slate-600 hover:bg-slate-700 hover:text-white transition-colors">
+                              <Pencil className="w-4 h-4" />
+                            </button>
+
+                            <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </>
+                        }
+
+
+
                       </div>
                     </td>
                   </tr>
