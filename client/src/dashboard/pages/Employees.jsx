@@ -37,6 +37,8 @@ export default function Employees() {
   const [editEmpDept, setEditEmpDept] = useState("Engineering");
   const [editEmpPosition, setEditEmpPosition] = useState("");
 
+  const [refresh, setRefresh] = useState(false);
+
   const [empData, setEmpData] = useState([]);
 
   const fetchEmployees = async () => {
@@ -58,7 +60,7 @@ export default function Employees() {
 
   useEffect(() => {
     fetchEmployees();
-  }, []);
+  }, [refresh]);
 
   const handleEdit = (emp) => {
     console.log("Edit Button Clicked...." + emp._id + emp.employee_name);
@@ -78,6 +80,19 @@ export default function Employees() {
       console.log(response);
 
       setEditingID(null);
+      setRefresh(!refresh);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/deleteemployee/${id}`);
+      console.log(response);
+
+      setRefresh(!refresh);
     }
     catch (err) {
       console.log(err);
@@ -214,7 +229,7 @@ export default function Employees() {
                               <Pencil className="w-4 h-4" />
                             </button>
 
-                            <button className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
+                            <button onClick={() => handleDelete(e._id)} className="p-2 rounded-lg bg-white/70 border border-white/70 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </>

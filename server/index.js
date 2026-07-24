@@ -55,7 +55,15 @@ app.put("/updateemployee/:id", async (req, res) => {
     }
 })
 
-
+app.delete("/deleteemployee/:id", async(req, res) => {
+    try{
+        await Employee.deleteOne({_id : req.params.id});
+        res.send({message : "Employee deleted successfully"});
+    }
+    catch(err){
+        console.log(err);
+    }
+})
 
 
 
