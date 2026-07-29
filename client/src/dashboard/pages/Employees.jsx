@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, Eye, Pencil, Trash2, Users, UserCheck, UserMinus, ChevronLeft, ChevronRight, Check, X } from "lucide-react";
 import axios from 'axios'
-
-const employees = [
-  { id: 1, name: "Sarah Khan", email: "sarah@company.com", department: "Human Resources", position: "HR Manager", status: "Active" },
-  { id: 2, name: "James Carter", email: "james@company.com", department: "Engineering", position: "Frontend Developer", status: "Active" },
-  { id: 3, name: "Aisha Malik", email: "aisha@company.com", department: "Marketing", position: "Content Strategist", status: "On Leave" },
-  { id: 4, name: "David Lee", email: "david@company.com", department: "Sales", position: "Sales Executive", status: "Active" },
-  { id: 5, name: "Emily Davis", email: "emily@company.com", department: "Finance", position: "Accountant", status: "Inactive" },
-];
+import { toast } from "react-hot-toast";
 
 const statusStyles = {
   Active: "bg-green-100 text-green-700",
@@ -21,12 +14,6 @@ const statusDot = {
   "On Leave": "bg-yellow-500",
   Inactive: "bg-red-500",
 };
-
-const summary = [
-  { icon: Users, label: "Total Employees", value: employees.length },
-  { icon: UserCheck, label: "Active", value: employees.filter((e) => e.status === "Active").length },
-  { icon: UserMinus, label: "On Leave / Inactive", value: employees.filter((e) => e.status !== "Active").length },
-];
 
 export default function Employees() {
   const [query, setQuery] = useState("");
@@ -53,11 +40,6 @@ export default function Employees() {
     }
   }
 
-
-  const filtered = employees.filter((emp) =>
-    emp.name.toLowerCase().includes(query.toLowerCase())
-  );
-
   useEffect(() => {
     fetchEmployees();
   }, [refresh]);
@@ -81,6 +63,7 @@ export default function Employees() {
 
       setEditingID(null);
       setRefresh(!refresh);
+      toast.success(response.data.message);
     }
     catch (err) {
       console.log(err);
@@ -93,6 +76,11 @@ export default function Employees() {
       console.log(response);
 
       setRefresh(!refresh);
+      toast.success(response.data.message, {
+        iconTheme : {
+          primary : "red"
+        }
+      });
     }
     catch (err) {
       console.log(err);
@@ -123,24 +111,6 @@ export default function Employees() {
             className="bg-transparent outline-none text-sm text-slate-700 w-full placeholder:text-slate-400"
           />
         </div>
-      </div>
-
-      {/* Summary chips */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        {summary.map(({ icon: Icon, label, value }) => (
-          <div
-            key={label}
-            className="flex items-center gap-3.5 bg-white/50 backdrop-blur-xl border border-white/70 rounded-2xl shadow-lg shadow-blue-500/5 px-5 py-4"
-          >
-            <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-md shadow-blue-500/30">
-              <Icon className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">{value}</p>
-              <p className="text-xs text-slate-500">{label}</p>
-            </div>
-          </div>
-        ))}
       </div>
 
       {/* Table */}
@@ -242,30 +212,8 @@ export default function Employees() {
                   </tr>
                 ))
               }
-
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="px-6 py-10 text-center text-slate-400">
-                    No employees found.
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
-        </div>
-
-        {/* Pagination */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-white/60 text-sm text-slate-500">
-          <span>Showing {filtered.length} of {employees.length} employees</span>
-          <div className="flex items-center gap-2">
-            <button className="p-2 rounded-lg bg-white/70 border border-white/70 hover:bg-white transition-colors">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <span className="px-3 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium shadow-sm">1</span>
-            <button className="p-2 rounded-lg bg-white/70 border border-white/70 hover:bg-white transition-colors">
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </div>
     </div>

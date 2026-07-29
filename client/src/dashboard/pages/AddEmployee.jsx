@@ -13,6 +13,7 @@ import {
   Camera,
 } from "lucide-react";
 import axios from 'axios'
+import { toast } from "react-hot-toast";
 
 const inputClass =
   "w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-white/70 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 text-sm transition-shadow";
@@ -51,6 +52,7 @@ export default function AddEmployee() {
       setEmpSalary("");
 
       setGender("");
+      toast.success(response.data.message)
     }
     catch (err) {
       console.log(err);
