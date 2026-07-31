@@ -20,6 +20,7 @@ const inputClass =
 
 export default function AddEmployee() {
 
+  const [empProfileImage, setEmpProfileImage] = useState(null);
   const [empFullName, setEmpFullName] = useState("");
   const [empEmail, setEmpEmail] = useState("");
   const [empPhoneNumber, setEmpPhoneNumber] = useState("");
@@ -35,9 +36,21 @@ export default function AddEmployee() {
   const handleSubmission = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/addemployee", {
-        empFullName, empEmail, empPhoneNumber, empAddress, empDepartment, empPosition, empJoiningDate, empSalary, gender
-      });
+
+      const formData = new FormData();
+      formData.append("empFullName", empFullName);
+      formData.append("empEmail", empEmail);
+      formData.append("empPhoneNumber", empPhoneNumber);
+      formData.append("empAddress", empAddress);
+      formData.append("empDepartment", empDepartment);
+      formData.append("empPosition", empPosition);
+      formData.append("empJoiningDate", empJoiningDate);
+      formData.append("empSalary", empSalary);
+      formData.append("gender", gender);
+      formData.append("profile", empProfileImage);
+
+
+      const response = await axios.post("http://localhost:3000/addemployee", formData);
 
       console.log(response);
 
@@ -77,26 +90,12 @@ export default function AddEmployee() {
       <form
         onSubmit={handleSubmission}
         className="bg-white/50 backdrop-blur-2xl border border-white/70 rounded-3xl shadow-xl shadow-blue-500/5 p-6 sm:p-9 space-y-8"
+        encType="multipart/form-data"
       >
-        {/* Avatar upload */}
-        <div className="flex items-center gap-5">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center border border-white/70 shadow-inner">
-              <User className="w-8 h-8 text-blue-400" />
-            </div>
-            <button
-              type="button"
-              className="absolute -bottom-2 -right-2 p-1.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg shadow-md shadow-blue-500/30"
-            >
-              <Camera className="w-3.5 h-3.5 text-white" />
-            </button>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-800">Profile Photo</p>
-            <p className="text-xs text-slate-500">PNG or JPG, up to 2MB.</p>
-          </div>
-        </div>
 
+        <Field label="Profile Image" icon={User}>
+          <input type="file" className={inputClass} onChange={(e) => setEmpProfileImage(e.target.files[0])} />
+        </Field>
         {/* Personal Info */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-4">Personal Information</p>
