@@ -133,7 +133,7 @@ export default function Employees() {
                   <tr key={e._id} className="border-b border-white/50 last:border-0 hover:bg-white/60 transition-colors">
                     <td className="px-6 py-4 flex items-center gap-3">
                       <img
-                        src={`https://i.pravatar.cc/40?u=${e._id}`}
+                        src={`http://localhost:3000/uploads/${e.employee_image}`}
                         alt={e.employee_name}
                         className="w-9 h-9 rounded-full ring-2 ring-blue-100"
                       />

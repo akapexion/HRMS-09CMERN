@@ -7,6 +7,8 @@ import Contact from './components/Contact'
 import DashboardLayout from './dashboard/DashboardLayout'
 import Employees from './dashboard/pages/Employees'
 import AddEmployee from './dashboard/pages/AddEmployee'
+import Attendence from './dashboard/pages/Attendence'
+import MarkAttendance from './dashboard/pages/MarkAttendance'
 
 const App = () => {
   return (
@@ -19,9 +21,11 @@ const App = () => {
             <Route path='/contact' element={<Contact />} />
           </Route>
 
-          <Route path='/dashboard' element={<DashboardLayout/>}>
-              <Route path="employees" element={<Employees/>}/>
-              <Route path="addemployee" element={<AddEmployee/>}/>
+          <Route path='/dashboard' element={<DashboardLayout />}>
+            <Route path="employees" element={<Employees />} />
+            <Route path="addemployee" element={<AddEmployee />} />
+            <Route path="attendance" element={<Attendence />} />
+            <Route path="mark-attendance" element={<MarkAttendance />} />
           </Route>
         </Routes>
       </BrowserRouter>

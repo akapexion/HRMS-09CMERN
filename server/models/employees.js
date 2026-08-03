@@ -36,6 +36,10 @@ const employeesSchema = new mongoose.Schema({
     employee_gender: {
         type: "String",
         required: true
+    },
+    employee_image : {
+        type: "String",
+        required : true
     }
 })
 

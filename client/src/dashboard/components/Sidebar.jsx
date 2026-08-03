@@ -14,7 +14,7 @@ const menuItems = [
   { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { name: "Employees", icon: Users, path: "employees" },
   { name: "Add Employee", icon: UserPlus, path: "addemployee" },
-  { name: "Attendance", icon: CalendarDays, path: "/dashboard/attendance" },
+  { name: "Attendance", icon: CalendarDays, path: "attendance" },
   { name: "Payroll", icon: Wallet, path: "/dashboard/payroll" },
   { name: "Settings", icon: Settings, path: "/dashboard/settings" },
 ];
@@ -42,10 +42,9 @@ export default function Sidebar({ className = "hidden md:flex" }) {
               to={path}
               end={path === "/dashboard"}
               className={({ isActive }) =>
-                `group relative flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${
-                  isActive
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30"
-                    : "text-slate-600 hover:bg-white/70 hover:text-blue-700"
+                `group relative flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${isActive
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30"
+                  : "text-slate-600 hover:bg-white/70 hover:text-blue-700"
                 }`
               }
             >
