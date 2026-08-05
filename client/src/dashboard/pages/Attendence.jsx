@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CalendarPlus } from 'lucide-react'
+import axios from 'axios'
 
 const attendanceData = [
     {
@@ -20,7 +21,30 @@ const typeStyles = {
 }
 
 const Attendence = () => {
-    const navigate = useNavigate()
+    const [attendance, setAttendance] = useState([]);
+    const [todayAttendance, setTodayAttendance] = useState(null);
+    const [currentTime, setCurrentTime] = useState("");
+    const [attendanceToggler, setAttendanceToggler] = useState(false);
+
+    const handleAttendanceLog = async () => {
+        try {
+            if (!todayAttendance) {
+                const res = await axios.post(
+                    "http://localhost:3000/attendance/check-in"
+                );
+
+                setTodayAttendance(res.data.attendance);
+            } else {
+                const res = await axios.post(
+                    "http://localhost:3000/attendance/check-out"
+                );
+                
+                setTodayAttendance(res.data.attendance);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <div className="min-h-full bg-gradient-to-br from-indigo-50/60 via-white to-blue-50/60 p-6 sm:p-8">
@@ -34,11 +58,16 @@ const Attendence = () => {
                 </div>
 
                 <button
-                    onClick={() => navigate('/dashboard/mark-attendance')}
-                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition-all duration-200 hover:shadow-lg hover:shadow-indigo-300 hover:-translate-y-0.5 active:translate-y-0"
+                    onClick={handleAttendanceLog}
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition-all duration-200 hover:shadow-lg hover:shadow-indigo-300 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
                     <CalendarPlus className="w-4 h-4" />
-                    Mark Attendance
+                    {attendanceToggler ?
+                        "Check In"
+                        :
+                        "Check Out"
+                    }
+
                 </button>
             </div>
 

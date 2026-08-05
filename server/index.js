@@ -4,6 +4,7 @@ import dbConnect from './config/db_connection.js';
 import cors from 'cors'
 import Employee from './models/employees.js'
 import upload from './middlewares/uploadMiddleware.js';
+import attendanceModel from './models/attendance.js';
 const app = express();
 
 dotenv.config();
@@ -70,8 +71,90 @@ app.delete("/deleteemployee/:id", async (req, res) => {
     }
 })
 
+app.post("/attendance/check-in", async (req, res) => {
+    try {
+        const today = new Date().toDateString();
 
+        // Check if already checked in today
+        const existingAttendance = await attendanceModel.findOne({
+            date: today,
+        });
 
+        if (existingAttendance) {
+            return res.status(400).json({
+                success: false,
+                message: "Already checked in today.",
+            });
+        }
+
+        const attendance = await attendanceModel.create({
+            date: today,
+            check_in: new Date(),
+            check_out: null,
+            total_hours: 0,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Checked in successfully.",
+            attendance,
+        });
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+});
+
+app.post("/attendance/check-out", async (req, res) => {
+    try {
+        const today = new Date().toDateString();
+
+        const attendance = await attendanceModel.findOne({
+            date: today,
+        });
+
+        if (!attendance) {
+            return res.status(404).json({
+                success: false,
+                message: "Please check in first.",
+            });
+        }
+
+        if (attendance.check_out) {
+            return res.status(400).json({
+                success: false,
+                message: "Already checked out.",
+            });
+        }
+
+        const checkOutTime = new Date();
+
+        const totalHours =
+            (checkOutTime - attendance.check_in) / (1000 * 60 * 60);
+
+        attendance.check_out = checkOutTime;
+        attendance.total_hours = Number(totalHours.toFixed(2));
+
+        await attendance.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Checked out successfully.",
+            attendance,
+        });
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+});
 
 
 
